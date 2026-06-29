@@ -1,0 +1,30 @@
+
+# ================================================================
+#   TRACEBACK — RENDER ENVIRONMENT VARIABLES REFERENCE FILE
+#   Copy these values one by one into Render Dashboard
+# ================================================================
+
+
+# ================================================================
+#  SERVICE 1: BACKEND (Web Service)
+#  Root Directory: backend | Build: npm install | Start: node server.js
+# ================================================================
+
+MONGODB_URI=mongodb+srv://riyagargofficial_db_user:Traceback123@cluster0.sqyqmzo.mongodb.net/traceback?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=tracebacksecret12345
+JWT_EXPIRE=30d
+NODE_ENV=production
+
+
+# ================================================================
+#  SERVICE 2: FRONTEND (Static Site)
+#  Root Directory: client | Build: npm run build | Publish: dist
+# ================================================================
+
+VITE_API_URL=https://YOUR_BACKEND_NAME.onrender.com
+
+# ================================================================
+#  NOTE: Replace YOUR_BACKEND_NAME with the actual backend
+#  service name shown on Render after backend is deployed.
+#  Example: https://traceback-abc1.onrender.com
+# ================================================================
