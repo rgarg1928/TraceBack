@@ -1,120 +1,106 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { useToast } from '../context/ToastContext';
-import { Mail, Lock, LogIn, Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { Mail, Lock, LogIn, Loader2, Eye, EyeOff, ArrowRight } from 'lucide-react';
 
 const Login = () => {
   const { loginUser, user } = useAuth();
-  const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [submitting, setSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  // If already logged in, redirect to dashboard
-  useEffect(() => {
-    if (user) {
-      navigate('/dashboard');
-    }
-  }, [user, navigate]);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  useEffect(() => { if (user) navigate('/dashboard'); }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.email || !formData.password) {
-      showToast('Please enter both email and password', 'warning');
-      return;
-    }
-
+    if (!formData.email || !formData.password) { toast.error('Please enter both email and password'); return; }
     setSubmitting(true);
     const result = await loginUser(formData.email, formData.password);
     setSubmitting(false);
-
-    if (result && result.success) {
-      showToast('Welcome back to TraceBack!', 'success');
+    if (result?.success) {
+      toast.success('Welcome back to TraceBack! 👋');
       navigate('/dashboard');
     } else {
-      showToast(result?.message || 'Invalid email or password', 'error');
+      toast.error(result?.message || 'Invalid email or password');
     }
   };
 
   return (
-    <div className="max-w-md mx-auto py-8">
-      <div className="p-8 rounded-3xl glass-panel space-y-6 shadow-2xl border border-slate-200/50 dark:border-slate-800/50">
-        <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-bold tracking-tight">Sign In</h1>
-          <p className="text-xs text-slate-400">Access your Chandigarh University Lost & Found account</p>
-        </div>
+    <div className="min-h-[70vh] flex items-center justify-center py-8">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+        className="w-full max-w-md"
+      >
+        {/* Glow blob */}
+        <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-64 bg-sky-500/20 rounded-full blur-3xl pointer-events-none" />
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-xs font-semibold mb-1 text-slate-400">Campus Email</label>
-            <div className="relative flex items-center">
-              <Mail className="absolute left-3 w-4 h-4 text-slate-400 pointer-events-none" />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="email@cuchd.in"
-                className="w-full text-sm pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent focus:ring-2 focus:ring-sky-500 focus:outline-none"
-                required
-              />
+        <div className="relative p-8 sm:p-10 rounded-3xl glass-panel space-y-7 shadow-2xl border border-slate-200/50 dark:border-slate-800/50">
+          {/* Header */}
+          <div className="text-center space-y-2">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-sky-500/10 flex items-center justify-center mb-4">
+              <LogIn className="w-7 h-7 text-sky-500" />
             </div>
+            <h1 className="text-2xl font-extrabold tracking-tight">Welcome back</h1>
+            <p className="text-xs text-slate-400">Sign in to your TraceBack account</p>
           </div>
 
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <label className="block text-xs font-semibold text-slate-400">Password</label>
-              <Link
-                to="/forgot-password"
-                className="text-xs text-sky-500 hover:underline"
-              >
-                Forgot Password?
-              </Link>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email */}
+            <div>
+              <label className="block text-xs font-semibold mb-1.5 text-slate-500">Campus Email</label>
+              <div className="relative">
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <input
+                  type="email" name="email" value={formData.email}
+                  onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
+                  placeholder="email@cuchd.in"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/60 focus:border-sky-500 transition-all"
+                  required
+                />
+              </div>
             </div>
-            <div className="relative flex items-center">
-              <Lock className="absolute left-3 w-4 h-4 text-slate-400 pointer-events-none" />
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                className="w-full text-sm pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent focus:ring-2 focus:ring-sky-500 focus:outline-none"
-                required
-              />
+
+            {/* Password */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-xs font-semibold text-slate-500">Password</label>
+                <Link to="/forgot-password" className="text-xs text-sky-500 hover:text-sky-600 font-medium">Forgot password?</Link>
+              </div>
+              <div className="relative">
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <input
+                  type={showPassword ? 'text' : 'password'} name="password" value={formData.password}
+                  onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
+                  placeholder="••••••••"
+                  className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/60 focus:border-sky-500 transition-all"
+                  required
+                />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
+
+            <button type="submit" disabled={submitting} className="btn-primary w-full justify-center py-3 text-sm mt-2">
+              {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn className="w-4 h-4" />}
+              {submitting ? 'Signing in…' : 'Sign In'}
+              {!submitting && <ArrowRight className="w-4 h-4 ml-auto" />}
+            </button>
+          </form>
+
+          <div className="text-center text-xs text-slate-400 border-t border-slate-100/60 dark:border-slate-800/60 pt-5">
+            New to TraceBack?{' '}
+            <Link to="/register" className="text-sky-500 font-semibold hover:underline">Create an account</Link>
           </div>
-
-          <button
-            type="submit"
-            disabled={submitting}
-            className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 hover:bg-sky-600 disabled:bg-sky-500/50 text-white py-3 font-semibold text-sm shadow-lg shadow-sky-500/20 transition-all active:scale-95 cursor-pointer"
-          >
-            {submitting ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <LogIn className="w-4 h-4" />
-            )}
-            Sign In
-          </button>
-        </form>
-
-        <div className="text-center text-xs text-slate-400 pt-2 border-t border-slate-100/50 dark:border-slate-800/50">
-          New to TraceBack?{' '}
-          <Link to="/register" className="text-sky-500 font-semibold hover:underline">
-            Create an Account
-          </Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
