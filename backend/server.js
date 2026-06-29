@@ -19,25 +19,30 @@ connectDB().then(() => {
 const app = express();
 const server = http.createServer(app);
 
-// Configure CORS
+// Configure CORS — allow Render frontend static site and local dev
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
-  process.env.CLIENT_URL // For production Vercel frontend URL
+  process.env.CLIENT_URL // Render frontend static site URL
 ].filter(Boolean);
 
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps or curl requests)
+    // Allow requests with no origin (e.g. curl, mobile apps, Render health checks)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1 && process.env.NODE_ENV !== 'production') {
-      // In development, allow arbitrary local origins if not listed
+    // In development allow all localhost origins
+    if (process.env.NODE_ENV !== 'production') return callback(null, true);
+    // In production, allow if origin is in allowedOrigins OR if CLIENT_URL is not set yet (first deploy)
+    if (allowedOrigins.includes(origin) || allowedOrigins.length === 0) {
       return callback(null, true);
     }
-    return callback(null, true); // Keep it permissive for easy deployment testing
+    // Render services: allow all *.onrender.com origins
+    if (origin.endsWith('.onrender.com')) return callback(null, true);
+    return callback(null, true); // Keep permissive for easy deployment testing
   },
   credentials: true
 }));
+
 
 // Body parser middleware
 app.use(express.json());
