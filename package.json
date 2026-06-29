@@ -1,0 +1,19 @@
+{
+  "name": "traceback-root",
+  "version": "1.0.0",
+  "description": "TraceBack - Chandigarh University Lost & Found Portal",
+  "scripts": {
+    "install-backend": "cd backend && npm install",
+    "install-client": "cd client && npm install",
+    "install-all": "npm run install-backend && npm run install-client",
+    "dev-backend": "cd backend && npm run dev",
+    "dev-client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run dev-backend\" \"npm run dev-client\"",
+    "build-client": "cd client && npm run build",
+    "build-backend": "cd backend && npm run build",
+    "build": "npm run build-client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
