@@ -13,6 +13,13 @@
     "build-backend": "cd backend && npm run build",
     "build": "npm run build-client"
   },
+  "dependencies": {
+    "framer-motion": "^11.0.0",
+    "lottie-react": "^2.4.0",
+    "react-hot-toast": "^2.4.0",
+    "classnames": "^2.5.1",
+    "sass": "^1.80.0"
+  },
   "devDependencies": {
     "concurrently": "^8.2.2"
   }

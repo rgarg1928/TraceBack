@@ -1,0 +1,43 @@
+/* src/styles/theme.css */
+:root {
+  /* Light theme */
+  --color-bg: 250, 250, 250; /* rgb */
+  --color-bg-card: 255, 255, 255;
+  --color-text: 20, 20, 20;
+  --color-primary: 14, 165, 233; /* sky-500 */
+  --color-primary-dark: 56, 189, 248; /* sky-600 */
+  --color-muted: 240, 240, 240;
+  --gradient-primary: linear-gradient(135deg, #0ea5e9, #6366f1);
+}
+[data-theme='dark'] {
+  --color-bg: 15, 23, 42; /* slate-900 */
+  --color-bg-card: 30, 41, 59; /* slate-800 */
+  --color-text: 229, 229, 229; /* gray-200 */
+  --color-primary: 56, 189, 248; /* sky-400 */
+  --color-primary-dark: 14, 165, 233; /* sky-500 */
+  --color-muted: 31, 41, 55; /* slate-700 */
+  --gradient-primary: linear-gradient(135deg, #38bdf8, #818cf8);
+}
+
+/* Glassmorphism utility */
+.glass-card {
+  background: rgba(var(--color-bg-card), 0.45);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  border: 1px solid rgba(var(--color-muted), 0.3);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+/* Global body */
+html, body {
+  background-color: rgb(var(--color-bg));
+  color: rgb(var(--color-text));
+  font-family: 'Inter', system-ui, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Transition for dark mode */
+[data-theme] * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
