@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Otp = require('../models/Otp');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
@@ -262,3 +263,97 @@ exports.logout = async (req, res) => {
     message: 'Logged out successfully'
   });
 };
+
+// @desc    Send OTP to email
+// @route   POST /api/auth/send-otp
+// @access  Public
+exports.sendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Please provide an email' });
+    }
+
+    // Generate random 6 digit code
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Store in DB (delete previous OTP for this email if any)
+    await Otp.deleteMany({ email });
+    await Otp.create({ email, code });
+
+    console.log(`[OTP Verification] Generated code ${code} for email ${email}`);
+
+    // Return the code in development/simulation response so client can display it as a toast
+    res.status(200).json({
+      success: true,
+      message: 'Verification code sent (Simulation: Check console or use code below)',
+      otp: code // For direct simulation/testing convenience
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Verify OTP
+// @route   POST /api/auth/verify-otp
+// @access  Public
+exports.verifyOtp = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    if (!email || !code) {
+      return res.status(400).json({ success: false, message: 'Please provide email and code' });
+    }
+
+    const otpRecord = await Otp.findOne({ email, code });
+    if (!otpRecord) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired verification code' });
+    }
+
+    // Valid code! Delete code so it can't be reused
+    await Otp.deleteMany({ email });
+
+    res.status(200).json({
+      success: true,
+      message: 'Verification successful!'
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Reset password using OTP
+// @route   POST /api/auth/reset-password-otp
+// @access  Public
+exports.resetPasswordWithOtp = async (req, res) => {
+  try {
+    const { email, code, password } = req.body;
+    if (!email || !code || !password) {
+      return res.status(400).json({ success: false, message: 'Please provide all details' });
+    }
+
+    const otpRecord = await Otp.findOne({ email, code });
+    if (!otpRecord) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired verification code' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Set new password (the pre-save hook handles hashing)
+    user.password = password;
+    await user.save();
+
+    // Clean OTP code
+    await Otp.deleteMany({ email });
+
+    res.status(200).json({
+      success: true,
+      message: 'Password reset successfully!'
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+

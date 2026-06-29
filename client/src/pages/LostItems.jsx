@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import axios from 'axios';
+import { getImageUrl } from '../utils/imageHelper';
 import {
   Search as SearchIcon,
   Filter,
@@ -282,7 +283,7 @@ const LostItems = () => {
                 {/* Image block */}
                 <div className="h-44 bg-slate-100 dark:bg-slate-850 relative overflow-hidden flex items-center justify-center">
                   {item.image ? (
-                    <img src={item.image} alt={item.itemName} className="w-full h-full object-cover" />
+                    <img src={getImageUrl(item.image)} alt={item.itemName} className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-4xl text-slate-300">📦</span>
                   )}
@@ -511,7 +512,7 @@ const LostItems = () => {
                   >
                     <div className="w-16 h-16 rounded-lg overflow-hidden bg-slate-100 flex items-center justify-center shrink-0">
                       {item.image ? (
-                        <img src={item.image} alt={item.itemName} className="w-full h-full object-cover" />
+                        <img src={getImageUrl(item.image)} alt={item.itemName} className="w-full h-full object-cover" />
                       ) : (
                         <span className="text-xl">📦</span>
                       )}

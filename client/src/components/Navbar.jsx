@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
 import axios from 'axios';
+import { getImageUrl } from '../utils/imageHelper';
 import { Sun, Moon, Bell, LogOut, User, Menu, X, Check, ShieldAlert } from 'lucide-react';
 
 const Navbar = ({ toggleSidebar }) => {
@@ -209,7 +210,7 @@ const Navbar = ({ toggleSidebar }) => {
                 >
                   <div className="h-8 w-8 overflow-hidden rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 flex items-center justify-center">
                     {user.profilePic ? (
-                      <img src={user.profilePic} alt={user.name} className="h-full w-full object-cover" />
+                      <img src={getImageUrl(user.profilePic)} alt={user.name} className="h-full w-full object-cover" />
                     ) : (
                       <User className="h-4 w-4 text-slate-500" />
                     )}

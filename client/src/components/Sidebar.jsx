@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import {
   Home,
   Info,
@@ -12,11 +13,16 @@ import {
   FileText,
   MessageSquare,
   ShieldCheck,
-  X
+  X,
+  Smartphone,
+  Download,
+  QrCode
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const { user } = useAuth();
+  const { showToast } = useToast();
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
 
   const isRoleAuthorizedForAdmin = user && ['Super Admin', 'Warden', 'Security Guard'].includes(user.role);
 
@@ -132,6 +138,26 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             )}
           </nav>
 
+          {/* DOWNLOAD APP BANNER */}
+          <div className="mt-6 px-3">
+            <div 
+              onClick={() => {
+                setShowDownloadModal(true);
+                toggleSidebar();
+              }}
+              className="p-3.5 rounded-2xl bg-gradient-to-br from-sky-500/10 to-indigo-500/10 hover:from-sky-500/20 hover:to-indigo-500/20 border border-sky-500/20 dark:border-sky-500/10 cursor-pointer transition-all duration-300 group flex items-center gap-3"
+            >
+              <div className="w-9 h-9 rounded-xl bg-sky-500/15 flex items-center justify-center text-sky-500 group-hover:scale-110 transition-transform">
+                <Smartphone className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-bold text-slate-800 dark:text-slate-200">Download App</p>
+                <p className="text-[10px] text-slate-400">Get official Android APK</p>
+              </div>
+              <Download className="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-500 transition-colors shrink-0" />
+            </div>
+          </div>
+
           {/* User brief at bottom */}
           {user && (
             <div className="mt-auto border-t border-slate-150 pt-4 dark:border-slate-800">
@@ -152,6 +178,62 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           )}
         </div>
       </aside>
+
+      {/* MOBILE APP DOWNLOAD MODAL */}
+      {showDownloadModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="relative w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl space-y-5 animate-scale-up">
+            <button
+              onClick={() => setShowDownloadModal(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="text-center space-y-2">
+              <div className="mx-auto w-12 h-12 rounded-2xl bg-sky-500/10 flex items-center justify-center text-sky-500">
+                <Smartphone className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold">Download TraceBack App</h3>
+              <p className="text-xs text-slate-400 px-4">
+                Access smart keyword matching, in-app chat, and upload pictures of items directly from your mobile device.
+              </p>
+            </div>
+
+            <div className="p-4 bg-slate-50 dark:bg-slate-950/40 border border-slate-150 dark:border-slate-800/80 rounded-2xl flex items-center gap-4">
+              <div className="bg-white p-2 rounded-xl border border-slate-250 dark:border-slate-800 flex items-center justify-center shrink-0">
+                <QrCode className="w-14 h-14 text-slate-800" />
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs font-bold">Scan QR to Install</p>
+                <p className="text-[10px] text-slate-400 leading-normal">
+                  Open your phone camera to scan the code and download the Android APK package directly.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => {
+                  showToast('Starting download: TraceBack_CU_v1.0.apk...', 'success');
+                  setShowDownloadModal(false);
+                }}
+                className="w-full py-3 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-semibold text-sm shadow-lg shadow-sky-500/25 transition-all flex items-center justify-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Download Android APK
+              </button>
+              
+              <button
+                disabled
+                className="w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-800/40 text-slate-400 dark:text-slate-500 font-semibold text-sm cursor-not-allowed border border-slate-200/50 dark:border-slate-800/20"
+              >
+                iOS Version (Coming Soon)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

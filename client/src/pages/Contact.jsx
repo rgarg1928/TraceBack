@@ -39,8 +39,8 @@ const Contact = () => {
             <Mail className="w-5 h-5 text-sky-500 shrink-0 mt-1" />
             <div>
               <p className="text-sm font-semibold">Email Support</p>
-              <p className="text-xs text-slate-400 mt-1 truncate">support@traceback.cu</p>
-              <p className="text-xs text-slate-400">riyagargofficial@gmail.com</p>
+              <p className="text-xs text-slate-400 mt-1">riyagargofficial@gmail.com</p>
+              <p className="text-xs text-slate-400">deepakbawa004@gmail.com</p>
             </div>
           </div>
 
@@ -48,18 +48,7 @@ const Contact = () => {
             <Phone className="w-5 h-5 text-sky-500 shrink-0 mt-1" />
             <div>
               <p className="text-sm font-semibold">Helpline</p>
-              <p className="text-xs text-slate-400 mt-1">+91 172 233 450</p>
-              <p className="text-xs text-slate-400">Ext: 4001</p>
-            </div>
-          </div>
-
-          <div className="p-6 rounded-2xl glass-panel flex items-start gap-4">
-            <MapPin className="w-5 h-5 text-sky-500 shrink-0 mt-1" />
-            <div>
-              <p className="text-sm font-semibold">Main Office</p>
-              <p className="text-xs text-slate-400 mt-1">Security HQ, Gate 2,</p>
-              <p className="text-xs text-slate-400">Chandigarh University,</p>
-              <p className="text-xs text-slate-400">Gharuan, Mohali, Punjab</p>
+              <p className="text-xs text-slate-400 mt-1">9478095710</p>
             </div>
           </div>
         </div>

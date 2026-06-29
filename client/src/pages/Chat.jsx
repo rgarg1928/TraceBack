@@ -3,8 +3,8 @@ import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
 import { useToast } from '../context/ToastContext';
 import axios from 'axios';
-import {
-  MessageSquare,
+import { getImageUrl } from '../utils/imageHelper';
+import {  MessageSquare,
   Send,
   User,
   Search,

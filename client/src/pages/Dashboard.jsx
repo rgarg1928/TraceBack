@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import axios from 'axios';
+import { getImageUrl } from '../utils/imageHelper';
 import {
   User,
   Phone,
@@ -192,7 +193,7 @@ const Dashboard = () => {
 
           <div className="relative mx-auto w-24 h-24 rounded-full overflow-hidden border-2 border-sky-500 bg-slate-100 flex items-center justify-center">
             {profilePreview ? (
-              <img src={profilePreview} alt={user?.name} className="h-full w-full object-cover" />
+              <img src={getImageUrl(profilePreview)} alt={user?.name} className="h-full w-full object-cover" />
             ) : (
               <User className="h-8 w-8 text-slate-400" />
             )}
@@ -341,7 +342,22 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+        {/* Footer Contact Info */}
+    <div className="mt-8 text-center space-y-2">
+      <p className="text-sm text-slate-500 dark:text-slate-400">
+        📧 Support: riyagargofficial@gmail.com | deepakbawa004@gmail.com
+      </p>
+      <p className="text-sm text-slate-500 dark:text-slate-400">
+        📞 Helpline: 9478095710
+      </p>
+      <a
+        href="#"
+        className="inline-block mt-2 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition"
+      >
+        📱 Download App
+      </a>
     </div>
+  </div>
   );
 };
 
